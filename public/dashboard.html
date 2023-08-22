@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashBoard</title>
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.2.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="../../bootstrap-5.2.2-dist/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>DashBoard</h1>
+    <h3>Welcome To Teni's Application</h3>
+    <form action="">
+        <label for="title">Enter The Title</label>
+        <input type="text" id="title" class="form-control w-25"><br>
+        <label for="content">Enter Message</label><br>
+        <textarea name="content" id="content" cols="40" rows="10"></textarea><br>
+        <div id="mrboat">
+            <button class="btn btn-outline-dark" onclick="sendPost(event)">Add Post</button>
+        </div>
+    </form>
+</body>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCY5sfANiMvdQhBHTucQvcw-bPA-3x1G4Y",
+        authDomain: "first-project-10599.firebaseapp.com",
+        projectId: "first-project-10599",
+        storageBucket: "first-project-10599.appspot.com",
+        messagingSenderId: "703193176528",
+        appId: "1:703193176528:web:8ed4e53c7fc111f01f81d5"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore()
+</script>
+<script>
+    let title = document.getElementById("title")
+    let content = document.getElementById("content")
+    let loadingbutton = document.getElementById("mrboat")
+
+    function sendPost(ev) {
+        ev.preventDefault();
+        // Add a new document in collection "cities"
+        loadingbutton.innerHTML = `<button class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border  spinner-border-sm" aria-hidden="true"></span>
+            <span role="status">Loading...</span>
+        </button>`
+        db.collection("Friends").doc("Mr Boat").set({
+            title: title.value,
+            content: content.value,
+            // country: "USA"
+        })
+        .then(() => {
+            console.log("Document successfully written!");
+            loadingbutton.innerHTML = "Document Created Successfully"
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+
+    }
+</script>
+</html>
