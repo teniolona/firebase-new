@@ -9,14 +9,18 @@
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <h1>Sign Up</h1><br>
-    <input type="text" id="email"><br>
-    <input type="password" id="password"><br>
-    <button type="button" onclick="signup(event)">Sign Up</button>
-    <div style="display: flex; align-items:center; width:150px;">
-      <hr width="100%" style="margin:0px auto">or<hr width="100%" style="margin: 0px auto;">
-    </div>
-    <button type="button" onclick="googlesignin(event)">Sign In With Google</button>
+  <h1>Sign Up</h1><br>
+  <label for="username">Username</label>
+  <input type="text" id="username"><br>
+  <label for="username">Email</label>
+  <input type="text" id="email"><br>
+  <label for="password">Password</label>
+  <input type="password" id="password"><br>
+  <button type="button" onclick="signup(event)">Sign Up</button>
+  <div style="display: flex; align-items:center; width:150px;">
+    <hr width="100%" style="margin:0px auto">or<hr width="100%" style="margin: 0px auto;">
+  </div>
+  <button type="button" onclick="googlesignin(event)">Sign In With Google</button>
 </body>
 <script>
     const firebaseConfig = {
@@ -27,56 +31,56 @@
       messagingSenderId: "703193176528",
       appId: "1:703193176528:web:8ed4e53c7fc111f01f81d5"
     };
-  
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     // Google
     var provider = new firebase.auth.GoogleAuthProvider();
 </script>
 <script>
-    // Firebase Hosting
-    let email = document.getElementById("email")
-    let password = document.getElementById("password")
-    function signup(ev) {
-      ev.preventDefault()
-      //window.location.href = "login.html"
-      firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
-      .then((userCredential) => {
-        // Signed in 
-        var user = userCredential.user;
-        alert("Successful")
-        // ...
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ..
-      });
-    }
-    function googlesignin(ev) {
-      ev.preventDefault()
-      firebase.auth()
-      .signInWithPopup(provider)
-      .then((result) => {
-        /** @type {firebase.auth.OAuthCredential} */
-        var credential = result.credential;
+  // Firebase Hosting
+  let username = document.getElementById("username")
+  let email = document.getElementById("email")
+  let password = document.getElementById("password")
+  function signup(ev) {
+    ev.preventDefault()
+    //window.location.href = "login.html"
+    firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
+    .then((userCredential) => {
+      // Signed in 
+      var user = userCredential.user;
+      alert("Successful")
+      // ...
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // ..
+    });
+  }
+  function googlesignin(ev) {
+    ev.preventDefault()
+    firebase.auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+      /** @type {firebase.auth.OAuthCredential} */
+      var credential = result.credential;
 
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
-        // IdP data available in result.additionalUserInfo.profile.
-        alert("Worked")
-      }).catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-      });
-    }
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      // IdP data available in result.additionalUserInfo.profile.
+      alert("Worked")
+    }).catch((error) => {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      // ...
+    });
+  }
 </script>
 </html>
