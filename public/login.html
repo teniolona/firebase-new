@@ -21,11 +21,11 @@
         <p class="fs-5 text-center">Input Your Details</p>
         <div class="row gap-5">
             <div class="row gap-2 mx-auto w-75">
-                <label for="email" class="form-label fs-5"> Email</label>
-                <input type="email" id="username" class="form-control" placeholder="Enter Your Email">
+                <label for="email" class="form-label fs-5">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter Your Email">
             </div>
             <div class="row gap-2 w-75 mx-auto">
-                <label for="password" class="form-label fs-5"> Password</label>
+                <label for="password" class="form-label fs-5">Password</label>
                 <input type="password" id="password" class="form-control" placeholder="Enter Your Password">
             </div>
         </div><br><br>
@@ -44,6 +44,9 @@
 
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
+
+    // Initialize Firebase Authentication and get a reference to the service
+    const auth = firebase.auth();
 </script>
 <script>
     let email = document.getElementById("email")
@@ -51,7 +54,19 @@
 
     function getUser(e) {
         e.preventDefault()
-
+        firebase.auth().signInWithEmailAndPassword(email.value, password.value)
+        .then((userCredential) => {
+            // Signed in
+            var user = userCredential.user;
+            alert("Correct!✅ Logging you in...")
+            window.location.href = "dashboard.html"
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorMessage)
+        });
     }
 </script>
 </html>

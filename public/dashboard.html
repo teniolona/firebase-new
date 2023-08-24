@@ -16,12 +16,16 @@
     <form action="">
         <label for="title">Enter The Title</label>
         <input type="text" id="title" class="form-control w-25"><br>
+        <label for="title">Enter The Document Topic</label>
+        <input type="text" id="topic" class="form-control w-25" placeholder="Enter doc"><br>
         <label for="content">Enter Message</label><br>
         <textarea name="content" id="content" cols="40" rows="10"></textarea><br>
         <div id="mrboat">
             <button class="btn btn-outline-dark" onclick="sendPost(event)">Add Post</button>
         </div>
     </form>
+    <div id="showpost"></div>
+    <p id="presentdate"></p>
 </body>
 <script>
     const firebaseConfig = {
@@ -36,12 +40,14 @@
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore()
+    const timestamp = firebase.firestore.FieldValue.serverTimestamp()
 </script>
 <script>
     let title = document.getElementById("title")
     let content = document.getElementById("content")
     let loadingbutton = document.getElementById("mrboat")
-
+    let topic = document.getElementById("topic")
+    let showPost = document.getElementById("showpost")
     function sendPost(ev) {
         ev.preventDefault();
         // Add a new document in collection "cities"
@@ -49,19 +55,49 @@
             <span class="spinner-border  spinner-border-sm" aria-hidden="true"></span>
             <span role="status">Loading...</span>
         </button>`
-        db.collection("Friends").doc("Mr Boat").set({
+        db.collection("Friends").doc(`${topic.value}`).set({
             title: title.value,
             content: content.value,
+            posttime: timestamp
             // country: "USA"
         })
         .then(() => {
+            dispPost()
             console.log("Document successfully written!");
             loadingbutton.innerHTML = "Document Created Successfully"
         })
         .catch((error) => {
             console.error("Error writing document: ", error);
         });
+    }
 
+    function dispPost() {
+        showPost.innerHTML = ""
+        db.collection("Friends").orderBy("posttime", "desc").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+                showPost.innerHTML += `<div><h3>${doc.data().title}</h3>
+                    <p>${doc.data().content}</p>
+                    <p>${doc.data().postime}</p>
+                    <button onclick="delPost('${doc.id}')">Delete</button>
+                </div><hr/>`
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
+    }
+    dispPost();
+    function delPost(id) {
+        db.collection("Friends").doc(id).delete().then(() => {
+            console.log("Document successfully deleted!");
+            alert(`You just deleted ${id}`)
+            dispPost();
+        }).catch((error) => {
+            console.error("Error removing document: ", error);
+            alert("Couldn't Delete")
+        });
     }
 </script>
 </html>

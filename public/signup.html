@@ -5,22 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
+    <link rel="stylesheet" href="../../bootstrap-5.2.2-dist/css/bootstrap.min.css">
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <h1>Sign Up</h1><br>
-  <label for="username">Username</label>
-  <input type="text" id="username"><br>
-  <label for="username">Email</label>
-  <input type="text" id="email"><br>
-  <label for="password">Password</label>
-  <input type="password" id="password"><br>
-  <button type="button" onclick="signup(event)">Sign Up</button>
-  <div style="display: flex; align-items:center; width:150px;">
-    <hr width="100%" style="margin:0px auto">or<hr width="100%" style="margin: 0px auto;">
+  <!-- <h1>Sign Up</h1><br> -->
+  <div>
+    <div class="container row text-center">Hello</div>
+    <div class="container row">
+      <label for="username">Username</label>
+      <input type="text" id="username"><br>
+      <label for="username">Email</label>
+      <input type="text" id="email"><br>
+      <label for="password">Password</label>
+      <input type="password" id="password"><br>
+      <button type="button" onclick="signup(event)">Sign Up</button>
+      <div style="display: flex; align-items:center; width:150px;">
+        <hr width="100%" style="margin:0px auto">or<hr width="100%" style="margin: 0px auto;">
+      </div>
+      <button type="button" onclick="googlesignin(event)">Sign In With Google</button>
+    </div>
   </div>
-  <button type="button" onclick="googlesignin(event)">Sign In With Google</button>
 </body>
 <script>
     const firebaseConfig = {
@@ -48,12 +54,29 @@
     .then((userCredential) => {
       // Signed in 
       var user = userCredential.user;
-      alert("Successful")
+      // alert("Successful")
+      // const user = firebase.auth().currentUser;
+
+      user.updateProfile({
+        displayName: username.value,
+        // photoURL: "https://example.com/jane-q-user/profile.jpg"
+      }).then(() => {
+        // Update successful
+        console.log(user)
+        alert(`You're Welcome, ${username.value}`)
+        window.location.href = "login.html"
+
+        // ...
+      }).catch((error) => {
+        // An error occurred
+        // ...
+      });  
       // ...
     })
     .catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
+      alert(errorMessage)
       // ..
     });
   }
